@@ -73,7 +73,6 @@ public class MessageUtil {
      * 扩展xstream使其支持CDATA
      */
     private static XStream xStream = new XStream(new XppDriver(){
-
     });
 
 }
