@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="weChart-web:war">
+    <output-path>$PROJECT_DIR$/weChart-web/target</output-path>
+    <root id="archive" name="weChart-web.war">
+      <element id="artifact" artifact-name="weChart-web:war exploded" />
+    </root>
+  </artifact>
+</component>
