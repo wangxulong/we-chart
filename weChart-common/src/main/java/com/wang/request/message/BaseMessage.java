@@ -10,7 +10,7 @@ public class BaseMessage {
     private String ToUserName;
     //发送方账号（要给openId）
     private String FromUserName;
-    //消息创建时间  整形
+    //消息创建时间  整形 表示从1970到消息创建所间隔的秒数
     private long CreateTime;
     //消息类型（text/image/location/link/voice）
     private String MsgType;

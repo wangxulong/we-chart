@@ -4,4 +4,12 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+    <servlet>
+        <servlet-name>sign</servlet-name>
+        <servlet-class>com.wang.action.SignController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sign</servlet-name>
+        <url-pattern>/sign.do</url-pattern>
+    </servlet-mapping>
 </web-app>

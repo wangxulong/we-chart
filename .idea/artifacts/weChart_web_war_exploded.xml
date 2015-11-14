@@ -6,6 +6,11 @@
         <element id="directory" name="classes">
           <element id="module-output" name="weChart-web" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.10" />
+          <element id="library" level="project" name="Maven: junit:junit:4.12" />
+          <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:1.3" />
+        </element>
       </element>
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/weChart-web/target/weChart-web/META-INF/MANIFEST.MF" />

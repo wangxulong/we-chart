@@ -1,8 +1,11 @@
 package com.wang.util;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.core.util.QuickWriter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 import com.thoughtworks.xstream.io.xml.XppDriver;
+import com.wang.response.message.*;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -20,30 +23,38 @@ import java.util.Map;
 public class MessageUtil {
     //请求消息类型：文本
     public static final String REQ_MESSAGE_TYPE_TEXT="text";
-    public static final String REQ_MESSAGE_TYPE_IMAGE="iamge";
+    ////请求消息类型：图片
+    public static final String REQ_MESSAGE_TYPE_IMAGE="image";
+    //请求消息类型：语音
     public static final String REQ_MESSAGE_TYPE_VOICE="voice";
+    //请求消息类型：视频
     public static final String REQ_MESSAGE_TYPE_VIDEO="video";
+    //小视频
+    public static final String REQ_MESSAGE_TYPE_SHORT_VIDEO="shortvideo";
     public static final String REQ_MESSAGE_TYPE_LOCATION="location";
     public static final String REQ_MESSAGE_TYPE_LINK="link";
     public static final String REQ_MESSAGE_TYPE_EVENT="event";
 
     //事件类型
     public static final String EVENT_TYPE_SUBSCRIBE="subscribe";
-    public static final String EVENT_TYPE_UNSUBSCRIBE="unSubscribe";
-    public static final String EVENT_TYPE_SCAN="scan";
+    public static final String EVENT_TYPE_UNSUBSCRIBE="unsubscribe";
+    public static final String EVENT_TYPE_SCAN="SCAN";
     public static final String EVENT_TYPE_LOCATION="LOCATION";
     public static final String EVENT_TYPE_CLICK="CLICK";
+    public static final String EVENT_TYPE_VIEW="VIEW";
+
+
 
     //响应消息类型
     public static final String RESP_MESSAGE_TYPE_TEXT="text";
-    public static final String RESP_MESSAGE_TYPE_IMAGE="iamge";
+    public static final String RESP_MESSAGE_TYPE_IMAGE="image";
     public static final String RESP_MESSAGE_TYPE_VOICE="voice";
     public static final String RESP_MESSAGE_TYPE_VIDEO="video";
     public static final String RESP_MESSAGE_TYPE_MUSIC="music";
     public static final String RESP_MESSAGE_TYPE_NEWS="news";
 
     /**
-     * 解析微信发送来的消息
+     * 解析微信发送来的请求XML
      * @return
      */
     public static Map<String,String> parseXML(HttpServletRequest request) throws Exception{
@@ -73,7 +84,63 @@ public class MessageUtil {
      * 扩展xstream使其支持CDATA
      */
     private static XStream xStream = new XStream(new XppDriver(){
-
+        public HierarchicalStreamWriter createWriter(Writer out) {
+            return new PrettyPrintWriter(out){
+                //对所有的XML转换添加CDATA
+                boolean cdata = true;
+                public void startNode(String name,Class clazz){
+                    super.startNode(name,clazz);
+                }
+                protected void writeText(QuickWriter writer,String text){
+                    if(cdata){
+                        writer.write("<![CDATA[");
+                        writer.write(text);
+                        writer.write("]]>");
+                    }else{
+                        writer.write(text);
+                    }
+                }
+            };
+        }
     });
+
+    /**
+     * 文本消息转换为XML
+     */
+    public static String messageToXML(TextMessage textMessage){
+        xStream.alias("xml",textMessage.getClass());
+        return xStream.toXML(textMessage);
+    }
+    /**
+     * 语音消息转换为XML
+     */
+    public static String messageToXML(VoiceMessage voiceMessage){
+        xStream.alias("xml",voiceMessage.getClass());
+        return xStream.toXML(voiceMessage);
+    }
+    /**
+     * 视频消息转换为XML
+     */
+    public static String messageToXML(VideoMessage videoMessage){
+        xStream.alias("xml",videoMessage.getClass());
+        return xStream.toXML(videoMessage);
+    }
+    /**
+     * 音乐消息转换为XML
+     */
+    public static String messageToXML(MusicMessage musicMessage){
+        xStream.alias("xml",musicMessage.getClass());
+        return xStream.toXML(musicMessage);
+    }
+    /**
+     * 图文消息转换为XML
+     */
+    public static String messageToXML(NewsMessage newsMessage){
+        xStream.alias("xml",newsMessage.getClass());
+        xStream.alias("item",new Article().getClass());
+        return xStream.toXML(newsMessage);
+    }
+
+
 
 }

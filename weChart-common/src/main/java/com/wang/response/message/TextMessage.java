@@ -2,6 +2,7 @@ package com.wang.response.message;
 
 /**
  * Created by wxl on 2015/9/11.
+ * 回复文本消息
  */
 public class TextMessage extends BaseMessage {
     //回复的消息内容
